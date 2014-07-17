@@ -911,11 +911,12 @@
           <script>
             // global variables
             var map;
+            var mapOptions;
 
             function initializeMap() {
-              var mapOptions = {
+              mapOptions = {
                 zoom: 12,
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                //enableHighAccuracy : true,
               };
               map = new google.maps.Map(document.getElementById('map-canvas'),
                   mapOptions);
@@ -924,20 +925,22 @@
               // needs to use mobile towers for mobile devices?
               if(navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
+                  
                   var pos = new google.maps.LatLng(position.coords.latitude,
                                                    position.coords.longitude);
 
-                  // 'You are here' pointer.
-                  //var infowindow = new google.maps.InfoWindow({
-                  //  map: map,
-                  //  position: pos,
-                  //  content: 'You are about here.'
-                  //});
+                var marker=new google.maps.Marker({
+                  position:pos,
+                  //animation:google.maps.Animation.BOUNCE
+                });
 
-                  map.setCenter(pos);
+                marker.setMap(map);
+
+                map.setCenter(pos);
                 }, function() {
                   handleNoGeolocation(true);
                 });
+
               } else {
                 // Browser doesn't support Geolocation
                 handleNoGeolocation(false);
@@ -959,6 +962,7 @@
 
               var infowindow = new google.maps.InfoWindow(options);
               map.setCenter(options.position);
+
             }
 
             google.maps.event.addDomListener(window, 'load', initializeMap); 
